@@ -43,7 +43,17 @@ module PEM
       def create_certificate
         UI.important("Creating a new push certificate for app '#{PEM.config[:app_identifier]}'.")
 
-        csr, pkey = Spaceship.certificate.create_certificate_signing_request
+        pem_file_path = PEM.config[:csr_path]
+
+        if pem_file_path
+          UI.message("Using existing csr from #{pem_file_path}")
+          csr = OpenSSL::X509::Request.new File.read pem_file_path
+          raise 'CSR can not be verified' unless csr.verify csr.public_key
+
+          pkey = csr.public_key
+        else
+          csr, pkey = Spaceship.certificate.create_certificate_signing_request
+        end
 
         begin
           cert = certificate.create!(csr: csr, bundle_id: PEM.config[:app_identifier])

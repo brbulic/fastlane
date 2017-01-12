@@ -96,7 +96,12 @@ module PEM
                                      short_option: "-e",
                                      env_name: "PEM_OUTPUT_PATH",
                                      description: "The path to a directory in which all certificates and private keys should be stored",
-                                     default_value: ".")
+                                     default_value: "."),
+        FastlaneCore::ConfigItem.new(key: :csr_path,
+                                     short_option: "-c",
+                                     env_name: "PEM_CSR_FILE_NAME",
+                                     description: "The filename of the user provider CSR file",
+                                     optional: true)
       ]
     end
   end
