@@ -17,6 +17,16 @@ module PEM
         end
 
         if existing_certificate
+
+          if PEM.config[:save_existing]
+            x509_certificate = existing_certificate.download
+
+            output_path = PEM.config[:output_path]
+            x509_cert_path = File.join(output_path, "#{PEM.config[:app_identifier]}.cer")
+            File.write(x509_cert_path, x509_certificate.to_der)
+            UI.message("PEM: saving certificate to: ".green + Pathname.new(x509_cert_path).realpath.to_s)
+          end
+
           remaining_days = (existing_certificate.expires - Time.now) / 60 / 60 / 24
           UI.message("Existing push notification profile for '#{existing_certificate.owner_name}' is valid for #{remaining_days.round} more days.")
           if remaining_days > PEM.config[:active_days_limit]

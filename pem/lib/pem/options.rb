@@ -101,6 +101,13 @@ module PEM
                                      short_option: "-c",
                                      env_name: "PEM_CSR_FILE_NAME",
                                      description: "The filename of the user provider CSR file",
+                                     optional: true),
+        FastlaneCore::ConfigItem.new(key: :save_existing,
+                                     short_option: "-x",
+                                     env_name: "PEM_SAVE_EXISTING",
+                                     description: "Should save existing push certificate if found",
+                                     is_string: false,
+                                     default_value: false,
                                      optional: true)
       ]
     end
